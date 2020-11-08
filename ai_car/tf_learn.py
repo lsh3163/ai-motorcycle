@@ -55,7 +55,6 @@ class DNN_Driver():
         
         print(img.shape)
         ret =  self.model.predict(np.array([img]))
-        print(ret, self.teY[10])
         return ret
 
     def get_test_img(self):

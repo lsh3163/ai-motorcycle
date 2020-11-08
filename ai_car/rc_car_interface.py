@@ -23,6 +23,7 @@ class RC_Car_Interface():
 
     def set_speed(self, speed, direction):
         cmd = direction + str(speed)
+        print(cmd)
         self.ser.write(cmd.encode("ascii"))
     
     def get_image_from_camera(self):

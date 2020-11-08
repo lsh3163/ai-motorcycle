@@ -23,11 +23,11 @@ class SelfDriving:
         #calculate left and right wheel speed with direction
         
         if direction < -0.2:
-            self.rc_car_cntl.set_speed(speed, direction="L")
+            self.rc_car_cntl.set_speed(20, direction="L")
         elif direction > 0.2:
-            self.rc_car_cntl.set_speed(speed, direction="R")
+            self.rc_car_cntl.set_speed(20, direction="R")
         else:
-            self.rc_car_cntl.set_speed(speed, direction="S")
+            self.rc_car_cntl.set_speed(20, direction="S")
 
     def drive(self):
         while True:
@@ -38,17 +38,17 @@ class SelfDriving:
 
             img = self.rc_car_cntl.get_image_from_camera()
 # predict_direction wants [256] array, not [16,16]. Thus call np.reshape to convert [16,16] to [256] array
-            img = np.reshape(img,(-1, 16, 16, 1))
+            img = np.reshape(img,(16, 16, 1))
 
             direction = self.dnn_driver.predict_direction(img)         # predict with single image
             print(direction)
-            #self.rc_car_control(direction[0][0])
+            self.rc_car_control(direction[0][0])
 
             # For debugging, show image
 #            cv2.imshow("target",  cv2.resize(img, (280, 280)) )
 #            cv2.waitKey(0)
 
-            time.sleep(0.001)
+            time.sleep(1)
 
         self.rc_car_cntl.stop()
         cv2.destroyAllWindows()
