@@ -19,7 +19,6 @@ class SelfDriving:
         self.velocity = 0
         self.direction = 0
         self.dnn_driver.load_weights("./checkpoints/my_checkpoint")
-        self.ser
     def rc_car_control(self, direction):
         #calculate left and right wheel speed with direction
         

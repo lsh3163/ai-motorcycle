@@ -20,18 +20,6 @@ class DNN_Driver():
         self.teX = None
         self.teY = None
         self.model = None
-
-    def tf_learn(self):
-        self.trX, self.trY = get_training_data()
-        self.teX, self.teY = get_test_data()
-        print()
-        # self.trX = self.trX.reshape((-1, 16, 16, 1))
-        # self.teX = self.teX.reshape((-1, 16, 16, 1))
-        print(self.trX.max(), self.teX.max())
-        seed = 0
-        np.random.seed(seed)
-        tf.random.set_seed(seed)
-        print(self.trX.shape, self.trY.shape)
         self.model=Sequential()
         
         self.model.add(Conv2D(16, (3, 3), activation='tanh', input_shape=(16, 16, 1), padding="same"))
@@ -43,6 +31,20 @@ class DNN_Driver():
         self.model.add(Dense(32, activation='tanh'))
         self.model.add(Dense(1, activation='tanh'))
         self.model.compile(loss='mean_squared_error', optimizer='adam')
+
+    def tf_learn(self):
+        self.trX, self.trY = get_training_data()
+        self.teX, self.teY = get_test_data()
+        print()
+        self.trX = self.trX.reshape((-1, 16, 16, 1))
+        self.teX = self.teX.reshape((-1, 16, 16, 1))
+        print(self.trX.max(), self.teX.max())
+        seed = 0
+        np.random.seed(seed)
+        tf.random.set_seed(seed)
+        print(self.trX.shape, self.trY.shape)
+        
+        
         print(self.model.summary())
         self.model.fit(self.trX, self.trY, epochs=20, batch_size=16)
         self.model.save_weights('./checkpoints/my_checkpoint')
@@ -50,10 +52,7 @@ class DNN_Driver():
 
     def predict_direction(self, img):
         self.model.load_weights('./checkpoints/my_checkpoint')
-        # self.model.save_weights('./checkpoints/my_checkpoint')
-
         
-        # img = np.array([np.reshape(img,img.shape**2)])
         print(img.shape)
         ret =  self.model.predict(np.array([img]))
         print(ret, self.teY[10])
@@ -67,16 +66,7 @@ class DNN_Driver():
         self.model.load_weights('./checkpoints/my_checkpoint')
         return self.model.evaluate(self.teX, self.teY)
     def load_weights(self, path):
-        self.model=Sequential()
         
-        self.model.add(Conv2D(16, (3, 3), activation='tanh', input_shape=(16, 16, 1), padding="same"))
-        self.model.add(MaxPooling2D(pool_size=(2, 2)))
-        self.model.add(Conv2D(16, (3, 3), activation='tanh', padding="same"))
-        self.model.add(MaxPooling2D(pool_size=(2, 2)))
-        self.model.add(Conv2D(16, (3, 3), activation='tanh', padding="same"))
-        self.model.add(Flatten())
-        self.model.add(Dense(32, activation='tanh'))
-        self.model.add(Dense(1, activation='tanh'))
         self.model.load_weights(path) 
 
 if __name__ == '__main__': 
