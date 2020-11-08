@@ -20,7 +20,6 @@ class SelfDriving:
     
         self.velocity = 0
         self.direction = 0
-        print("aaa")
         self.dnn_driver.tf_learn()
     
     def rc_car_control(self, direction):
