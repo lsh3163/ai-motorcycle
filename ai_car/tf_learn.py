@@ -66,6 +66,8 @@ class DNN_Driver():
     def get_score(self):
         self.model.load_weights('./checkpoints/my_checkpoint')
         return self.model.evaluate(self.teX, self.teY)
+    def load_weights(self, path):
+        self.model.load_weights(path) 
 
 dnn_driver = DNN_Driver()
 dnn_driver.tf_learn()

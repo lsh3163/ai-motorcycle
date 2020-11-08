@@ -9,6 +9,7 @@ import numpy as np
 import time
 import cv2
 
+
 class SelfDriving:
 
     def __init__(self):
@@ -20,34 +21,28 @@ class SelfDriving:
     
         self.velocity = 0
         self.direction = 0
-        self.dnn_driver.tf_learn()
-    
+        self.dnn_driver.load_weights("./checkpoints/my_checkpoint")
+        self.ser
     def rc_car_control(self, direction):
         #calculate left and right wheel speed with direction
-        if direction < -1.0:
-            direction = -1.0
-        if direction > 1.0:
-            direction = 1.0
-        if direction < 0.0:
-            left_speed = 1.0+direction
-            right_speed = 1.0
+        
+        if direction < -0.2:
+            self.rc_car_cntl.set_speed(speed, direction="L")
+        elif direction > 0.2:
+            self.rc_car_cntl.set_speed(speed, direction="R")
         else:
-            right_speed = 1.0-direction
-            left_speed = 1.0
-
-        self.rc_car_cntl.set_right_speed(right_speed)
-        self.rc_car_cntl.set_left_speed(left_speed)
+            self.rc_car_cntl.set_speed(speed, direction="S")
 
     def drive(self):
         while True:
 
 # For test only, get image from DNN test images
 #            img from get_test_img() returns [256] array. Do not call np.reshape()
-            img = self.dnn_driver.get_test_img()
+#            img = self.dnn_driver.get_test_img()
 
-#           img = self.rc_car_cntl.get_image_from_camera()
+           img = self.rc_car_cntl.get_image_from_camera()
 # predict_direction wants [256] array, not [16,16]. Thus call np.reshape to convert [16,16] to [256] array
-#           img = np.reshape(img,img.shape[0]**2)
+           img = np.reshape(img,(-1, 16, 16, 1))
 
             direction = self.dnn_driver.predict_direction(img)         # predict with single image
             print(direction)
