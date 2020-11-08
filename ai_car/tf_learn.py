@@ -67,10 +67,21 @@ class DNN_Driver():
         self.model.load_weights('./checkpoints/my_checkpoint')
         return self.model.evaluate(self.teX, self.teY)
     def load_weights(self, path):
+        self.model=Sequential()
+        
+        self.model.add(Conv2D(16, (3, 3), activation='tanh', input_shape=(16, 16, 1), padding="same"))
+        self.model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.model.add(Conv2D(16, (3, 3), activation='tanh', padding="same"))
+        self.model.add(MaxPooling2D(pool_size=(2, 2)))
+        self.model.add(Conv2D(16, (3, 3), activation='tanh', padding="same"))
+        self.model.add(Flatten())
+        self.model.add(Dense(32, activation='tanh'))
+        self.model.add(Dense(1, activation='tanh'))
         self.model.load_weights(path) 
 
-dnn_driver = DNN_Driver()
-dnn_driver.tf_learn()
-img = dnn_driver.get_test_img()
-dnn_driver.predict_direction(img)
-print(dnn_driver.get_score())
+if __name__ == '__main__': 
+    dnn_driver = DNN_Driver()
+    dnn_driver.tf_learn()
+    img = dnn_driver.get_test_img()
+    dnn_driver.predict_direction(img)
+    print(dnn_driver.get_score())
