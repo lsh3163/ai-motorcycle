@@ -38,7 +38,7 @@ class RC_Car_Interface():
         ## Invert black and white with threshold
         ret, img2 = cv2.threshold(img.astype(np.uint8), threshold, 255, cv2.THRESH_BINARY_INV)
 
-        img2 = cv2.resize(img2,(16,16), interpolation=cv2.INTER_AREA) / 255.0
+        img2 = cv2.resize(img2,(64,64), interpolation=cv2.INTER_AREA) / 255.0
 ##        cv2.imshow("Image", img2)
 ##       cv2.waitKey(0)
         return img2
